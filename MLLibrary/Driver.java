@@ -5,10 +5,14 @@ public class Driver{
   
     Random rand = new Random(); // creating Random object
     
-    double [] trainingDataPoints = {0,1,2,3};
-    dataPoints[0]= rand.nextDouble(10);
-    dataPoints[1]= rand.nextDouble(10);
-    dataPoints[2]= rand.nextInt(10);
-    dataPoints[3]= rand.nextInt(10);
+    DataPoint[] train = new DataPoint[5];
+      for (int i =0; i<train.length; i++){
+        train[i]=new DataPoint("type_" + i,"label_" + i, rand.nextDouble(), rand.nextDouble());
+      }
+    
+    DataPoint[] test = new DataPoint[5];
+      for (int i =0; i<test.length; i++){
+        test[i]=new DataPoint("type_" + i,"label_" + i, rand.nextDouble(i*.05), rand.nextDouble(i*1.0));
+      }
   }
 }
