@@ -1,0 +1,17 @@
+public class DataPoint{
+  double f1;
+  double f2;
+  String label;
+  String type;
+
+public noArgument(){
+
+}
+
+public abstract class model {
+  abstract void train(ArrayList<DataPoint> data);
+  abstract String test(ArrayList<DataPoint> data);
+  abstract Double getAccuracy(ArrayList<DataPoint> data);
+  abstract Double getPrecision(ArrayList<DataPoint> data);
+
+}
