@@ -14,5 +14,10 @@ public class Driver{
       for (int i =0; i<test.length; i++){
         test[i]=new DataPoint("type_" + i,"label_" + i, rand.nextDouble(i*.05), rand.nextDouble(i*1.0));
       }
+ 
+  }
+ 
+  public class DummyModel {
+    
   }
 }
