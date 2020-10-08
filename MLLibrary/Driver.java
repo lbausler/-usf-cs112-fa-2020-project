@@ -18,9 +18,11 @@ public class Driver{
       for (int i =0; i<test.length; i++){
         test[i]=new DataPoint("type_" + i,"label_" + i, rand.nextDouble(i*.05), rand.nextDouble(i*1.0));
       }
-
+      
+      //creating an object called DummyModel inside the main driver class 
+      DummyModel dModel = new DummyModel();
     
-    private static void initAndShowGUI() {
+   // private static void initAndShowGUI() {
 	// A JFrame is a window.
 	    JFrame myFrame = new JFrame();
 	//added title
@@ -34,13 +36,10 @@ public class Driver{
 	// We need to set how we want our content pane to lay out the 
 	// objects we add to it.  For now, we'll use a FlowLayout, which
 	// places objects left-to-right in a line.  (See the javadocs.)
-	    contentPane.setLayout(new GridLayout(1,1));
+	    contentPane.setLayout(new GridLayout(5,5));
 
 	    contentPane.add(new JButton("Test Data" + test));
 	    contentPane.add(new JButton("Train Data" + train));
      }
  
-  public class DummyModel {
-    
-  }
 }

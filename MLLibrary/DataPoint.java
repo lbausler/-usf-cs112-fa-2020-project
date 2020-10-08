@@ -31,7 +31,7 @@ public class DataPoint {
     return this.label;
   }
   
-  pubic void setf1(double newF1){
+  public void setf1(double newF1){
     this.f1 = newF1;
   } 
   public double getF1(){
@@ -44,10 +44,6 @@ public class DataPoint {
   public double getF2(){
     return this.f2;
   }
-  
-  
-  
-  
   
   
   
