@@ -44,6 +44,10 @@ public class DataPoint {
   public double getF2(){
     return this.f2;
   }
+  public String toString() {
+	  return this.type + " " + this.label + " " + this.f1 + " " + this.f2;
+	  
+  }
   
   
   

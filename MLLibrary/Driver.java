@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import javax.swing.*;    // all of the Swing objects
 import java.awt.*;       // more windowing components, including Container
@@ -9,20 +11,36 @@ public class Driver{
   
     Random rand = new Random(); // creating Random object
     
-    DataPoint[] train = new DataPoint[5];
-      for (int i =0; i<train.length; i++){
-        train[i]=new DataPoint("type_" + i,"label_" + i, rand.nextDouble(), rand.nextDouble());
+    ArrayList<DataPoint> trainList = new ArrayList<>();
+    
+      for (int i =0; i<5; i++){
+    	double f1 = rand.nextDouble();
+    	double f2 = rand.nextDouble();
+        trainList.add(new DataPoint("type_" + i,"label_" + i, f1, f2));
       }
     
-    DataPoint[] test = new DataPoint[5];
-      for (int i =0; i<test.length; i++){
-        test[i]=new DataPoint("type_" + i,"label_" + i, rand.nextDouble(i*.05), rand.nextDouble(i*1.0));
+      ArrayList<DataPoint> testList = new ArrayList<>();
+      
+      for (int i =0; i<5; i++){
+    	double f1 = rand.nextDouble();
+    	double f2 = rand.nextDouble();
+        testList.add(new DataPoint("type_" + i,"label_" + i, f1, f2));
       }
       
-      //creating an object called DummyModel inside the main driver class 
-      DummyModel dModel = new DummyModel();
+      System.out.println(trainList.toString());
+      System.out.println(testList.toString());
     
-   // private static void initAndShowGUI() {
+      
+    //creating an object called DummyModel inside the main driver class 
+      DummyModel dModel = new DummyModel();
+    // calling method and passing the Array List to the method train which is stored in dModel 
+    // clearing data 
+      dModel.train(trainList);
+      System.out.println(trainList.toString());
+      dModel.test(testList);
+      System.out.println(testList.toString());
+    
+      
 	// A JFrame is a window.
 	    JFrame myFrame = new JFrame();
 	//added title
@@ -38,8 +56,8 @@ public class Driver{
 	// places objects left-to-right in a line.  (See the javadocs.)
 	    contentPane.setLayout(new GridLayout(5,5));
 
-	    contentPane.add(new JButton("Test Data" + test));
-	    contentPane.add(new JButton("Train Data" + train));
+	    contentPane.add(new JButton("Test Data" + testList));
+	    contentPane.add(new JButton("Train Data" + trainList));
      }
  
 }
