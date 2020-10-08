@@ -9,7 +9,7 @@ public class DataPoint {
     this.f2 = 0.0;
   }
   
-  public DataPoint(String type,String label. double f1, double f2){
+  public DataPoint(String type,String label, double f1, double f2){
     this.type = type;
     this.label = label; 
     this.f1 = f1;
