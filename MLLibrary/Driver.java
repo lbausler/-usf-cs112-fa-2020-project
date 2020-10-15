@@ -6,6 +6,10 @@ import java.awt.*;       // more windowing components, including Container
 import java.io.*;
 import javax.swing.JFrame;
 
+
+
+
+
 public class Driver{
   public static void main(String[] args){
   
@@ -13,18 +17,28 @@ public class Driver{
     
     ArrayList<DataPoint> trainList = new ArrayList<>();
     
-      for (int i =0; i<5; i++){
+      for (int i =0; i<3; i++){
     	double f1 = rand.nextDouble();
     	double f2 = rand.nextDouble();
-        trainList.add(new DataPoint("type_" + i,"label_" + i, f1, f2));
+        trainList.add(new DataPoint(f1, f2, "blue", "label"));
       }
+      for (int i =0; i<3; i++){
+      	double f1 = rand.nextDouble();
+      	double f2 = rand.nextDouble();
+          trainList.add(new DataPoint(f1, f2, "red", "label"));
+        }
     
       ArrayList<DataPoint> testList = new ArrayList<>();
       
-      for (int i =0; i<5; i++){
+      for (int i =0; i<3; i++){
     	double f1 = rand.nextDouble();
     	double f2 = rand.nextDouble();
-        testList.add(new DataPoint("type_" + i,"label_" + i, f1, f2));
+    	testList.add(new DataPoint(f1, f2, "blue", "label"));
+      }
+      for (int i =0; i<3; i++){
+      	double f1 = rand.nextDouble() ;
+      	double f2 = rand.nextDouble() ;
+      	testList.add(new DataPoint(f1, f2, "red", "label"));
       }
       
       System.out.println(trainList.toString());
@@ -36,10 +50,11 @@ public class Driver{
     // calling method and passing the Array List to the method train which is stored in dModel 
     // clearing data 
       dModel.train(trainList);
-      System.out.println(trainList.toString());
+      //System.out.println(trainList.toString());
       dModel.test(testList);
-      System.out.println(testList.toString());
+      //System.out.println(testList.toString());
     
+      System.out.println(dModel.getMaximums());
       
 	// A JFrame is a window.
 	    JFrame myFrame = new JFrame();
@@ -56,8 +71,16 @@ public class Driver{
 	// places objects left-to-right in a line.  (See the javadocs.)
 	    contentPane.setLayout(new GridLayout(5,5));
 
-	    contentPane.add(new JButton("Test Data" + testList));
-	    contentPane.add(new JButton("Train Data" + trainList));
+	    //contentPane.add(new JButton("Test Data" ));
+	    //contentPane.add(new JButton("Train Data" + trainList));
+	    
+	    contentPane.add(new JButton("train maximum " + dModel.getMaximums()));
+	    contentPane.add(new JButton("Accuracy " + dModel.getAccuracy(trainList)));
+	    contentPane.add(new JButton("Precision "+ dModel.getPrecision(testList)));
+
+
+	    myFrame.pack();
+		myFrame.setVisible(true);
      }
  
 }
