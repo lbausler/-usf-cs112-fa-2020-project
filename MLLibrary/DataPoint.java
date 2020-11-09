@@ -8,7 +8,7 @@ public class DataPoint {
     this.f1 = 0.0;
     this.f2 = 0.0;
   }
-  
+  //f1 = age, f2 = fare, label = survived, type = train/test
   public DataPoint(double f1, double f2,String label,String type){
 	  
     this.label = label;
@@ -54,9 +54,14 @@ public class DataPoint {
 	  return this.type + " " + this.label + " " + this.f1 + " " + this.f2;
 	  
   }
+public static void test(Double[][] array) {
+	// TODO Auto-generated method stub
+	
+}
   
   
   
   
   
 }
+
