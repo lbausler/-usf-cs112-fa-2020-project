@@ -1,0 +1,172 @@
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+public class KNNModel extends Model{
+
+	private ArrayList<DataPoint> trainSet;
+	private int K;
+	private int p1;
+	private int p2;
+	  
+	//constructor passes in k and sets p1/p2 also instantiates trainSet
+	  public KNNModel(int kParam){
+	    this.K = kParam;
+	    this.p1 = 0;
+	    this.p2 = 0;
+	    this.trainSet = new ArrayList<DataPoint>();
+	  }
+	  
+	//Helper Method returns distance using DataPoint class
+	 private double getDistance(DataPoint p1, DataPoint p2) {
+		  double x1 = p1.getF1(); 
+		  double y1 = p1.getF2(); 
+		  double x2 = p2.getF1(); 
+		  double y2 = p2.getF2();
+		  return Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+	}
+	
+	 @Override
+	 //Reading through the data and finding instances of train 
+	 //adding the object dp to trainSet ArrayList if it is of type "train"
+	void train(ArrayList<DataPoint> sampleData) {
+		for(DataPoint dp : sampleData) {
+			if (dp.getType().equals("train")) {
+				p1 = p1 + Integer.parseInt(dp.getLabel());
+				trainSet.add(dp);
+			}
+		}
+	}
+
+	@Override
+	String test(ArrayList<DataPoint> data) {
+		//getting first element of ArrayList
+		DataPoint point = data.get(0);
+		int size = trainSet.size();
+		//Compute the distance between the point in test versus every point in the
+		//training set and store both the distance and the label into a 2D Array.
+		Double[][] array = new Double[size][2];
+		int row = 0;
+		
+		//checking if type is test 
+		if(point.getType().equals("test")) {
+			for(DataPoint pt : trainSet) {
+				System.out.println("distance " + getDistance(point,pt));
+				//parseDouble returns a new double initialized to the value represented by the specified String(label)
+				double label = Double.parseDouble(pt.getLabel());
+				double dist = getDistance(point,pt);
+				
+				//TODO populate 2d Array, index 0 is distance, index 1 is label
+				//row is an integer, column is the commented out code above
+				
+				array[row][0] = dist;
+				array[row][1] = label;
+				row ++;
+			}
+		//Sort the 2D array storing the distance and the label
+			Arrays.sort(array, new java.util.Comparator<Double[]>() {
+				public int compare(Double[] a, Double [] b) {
+				return a[0].compareTo(b[0]);
+				
+				}
+				});
+		}
+		else {
+			return null;	
+		}
+		
+		int counter1 = 0;
+		int counter2 = 0;
+		
+		for(int i = 0; i<K; i++ ) {
+			if(array[i][1]==0.0) {
+				counter1++;
+			}else {
+				counter2++;
+			}
+		}
+		if(counter1>counter2) {
+			return "0";
+		}else {
+			return "1";
+		}
+		
+		//deepToString returns a string representation of the “deep contents”
+		//Arrays.deepToString(array);
+		
+		
+		//For each test data in the input collection, obtain the label by running the test method
+	      
+	}
+	@Override
+	Double getAccuracy(ArrayList<DataPoint> data) {
+		double truePos = 0;
+		double falsePos = 0;
+		double trueNeg = 0;
+		double falseNeg = 0;
+		
+		for(DataPoint pt : data) {
+			String str = "1";//test(pt);
+			
+			 if(pt.getLabel().equals("1")&&str.equals("1")) {
+		    	 truePos++;	    	
+		      }
+			 if(pt.getLabel().equals("1")&&str.equals("0")) {
+		    	 falsePos++;	    	  
+		      }
+			 
+			 if(pt.getLabel().equals("0")&&str.equals("1")) {
+		    	falseNeg++;  
+		      }
+			 if(pt.getLabel().equals("0")&&str.equals("0")) {
+		    	trueNeg++;
+		    	  
+		      }
+		}
+		
+		return (truePos + trueNeg) / (truePos +trueNeg + falsePos + falseNeg);
+	}
+
+	@Override
+	Double getPrecision(ArrayList<DataPoint> data) {
+		// TODO Auto-generated method stub
+		double truePos = 0;
+		double falsePos = 0;
+		double trueNeg = 0;
+		double falseNeg = 0;
+		
+		for(DataPoint pt : data) {
+			String str = "1";//test(pt);
+			
+			 if(pt.getLabel().equals("1")&&str.equals("1")) {
+		    	 truePos++;	    	
+		      }
+			 if(pt.getLabel().equals("1")&&str.equals("0")) {
+		    	 falsePos++;	    	  
+		      }
+			 
+			 if(pt.getLabel().equals("0")&&str.equals("1")) {
+		    	falseNeg++;  
+		      }
+			 if(pt.getLabel().equals("0")&&str.equals("0")) {
+		    	trueNeg++;
+		    	  
+		      }
+		}
+		
+		return (truePos/(truePos + falseNeg));
+	}
+
+	public ArrayList<DataPoint> getTrainSet() {
+		return trainSet;
+	}
+
+	public void setTrainSet(ArrayList<DataPoint> trainSet) {
+		this.trainSet = trainSet;
+	}
+
+	
+
+}
