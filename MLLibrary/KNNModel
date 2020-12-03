@@ -10,6 +10,8 @@ public class KNNModel extends Model{
 	private int K;
 	private int p1;
 	private int p2;
+	
+	
 	  
 	//constructor passes in k and sets p1/p2 also instantiates trainSet
 	  public KNNModel(int kParam){
@@ -17,6 +19,10 @@ public class KNNModel extends Model{
 	    this.p1 = 0;
 	    this.p2 = 0;
 	    this.trainSet = new ArrayList<DataPoint>();
+	  }
+	  
+	  public void setK(int newk) {
+		  this.K = newk;
 	  }
 	  
 	//Helper Method returns distance using DataPoint class
@@ -100,6 +106,75 @@ public class KNNModel extends Model{
 		//For each test data in the input collection, obtain the label by running the test method
 	      
 	}
+	
+	String test(DataPoint data) {
+		//getting first element of ArrayList
+		//DataPoint point = data.get(0);
+		int size = trainSet.size();
+		//Compute the distance between the point in test versus every point in the
+		//training set and store both the distance and the label into a 2D Array.
+		Double[][] array = new Double[size][2];
+		int row = 0;
+		
+		//checking if type is test 
+		if(data.getType().equals("test")) {
+			for(DataPoint pt : trainSet) {
+		//		System.out.println("distance " + getDistance(data,pt));
+				//parseDouble returns a new double initialized to the value represented by the specified String(label)
+				double label = Double.parseDouble(pt.getLabel());
+				double dist = getDistance(data,pt);
+				
+				//TODO populate 2d Array, index 0 is distance, index 1 is label
+				//row is an integer, column is the commented out code above
+				
+				array[row][0] = dist;
+				array[row][1] = label;
+				row ++;
+			}
+		//Sort the 2D array storing the distance and the label
+			Arrays.sort(array, new java.util.Comparator<Double[]>() {
+				public int compare(Double[] a, Double [] b) {
+				return a[0].compareTo(b[0]);
+				
+				}
+				});
+		}
+		else {
+			return null;	
+		}
+		
+		int counter1 = 0;
+		int counter2 = 0;
+		
+		for(int i = 0; i<K; i++ ) {
+			if(array[i][1]==0.0) {
+				counter1++;
+			}else {
+				counter2++;
+			}
+		}
+		if(counter1>counter2) {
+			return "0";
+		}else {
+			return "1";
+		}
+		
+		//deepToString returns a string representation of the “deep contents”
+		//Arrays.deepToString(array);
+		
+		
+		//For each test data in the input collection, obtain the label by running the test method
+	      
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	Double getAccuracy(ArrayList<DataPoint> data) {
 		double truePos = 0;
