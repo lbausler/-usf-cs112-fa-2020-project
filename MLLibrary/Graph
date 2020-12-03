@@ -2,26 +2,34 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 
 public class Graph extends JPanel {
+	
 
     private static final long serialVersionUID = 1L;
     private int labelPadding = 40;
@@ -45,10 +53,10 @@ public class Graph extends JPanel {
     private int numYGridLines = 6;
     private int padding = 40;
 
-    private List<DataPoint> data;
+    private static ArrayList<DataPoint> data;
 
     // TODO: Add a private KNNModel variable
-    	private KNNModel Kmodel;
+    	private static KNNModel Kmodel;
     	public int truePos;
     	public int trueNeg;
     	public int falsePos;
@@ -57,7 +65,7 @@ public class Graph extends JPanel {
 	 * Constructor method
 	 */
     public Graph(List<DataPoint> testData, List<DataPoint> trainData) {
-        this.data = testData;
+        this.data = (ArrayList<DataPoint>) testData;
         // TODO: instantiate a KNNModel variable
         Kmodel = new KNNModel(5);
         // TODO: Run train with the trainData
@@ -230,7 +238,7 @@ public class Graph extends JPanel {
 
     /* Mutator */
     public void setData(List<DataPoint> data) {
-        this.data = data;
+        this.data = (ArrayList<DataPoint>) data;
         invalidate();
         this.repaint();
     }
@@ -257,6 +265,73 @@ public class Graph extends JPanel {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        //frame.setUndecorated(true);
+
+        
+      //adding Jlabel
+       
+        
+        //JPanel main = new JPanel();
+
+        JLabel Lab4 = new JLabel();
+        Lab4.setText("Choose the majority value");
+        Lab4.setLocation(0, 0);
+      
+        frame.getContentPane().add(Lab4);
+        //mainPanel.add(frame);
+      // adding slider
+    
+        
+        DefaultBoundedRangeModel model = new DefaultBoundedRangeModel(5, 0, 2, 25);
+        JSlider slider = new JSlider(model);
+        slider.setMajorTickSpacing(5);
+        slider.setMinorTickSpacing(1);
+        slider.setPaintTicks(true);
+        slider.setSnapToTicks(true);
+        slider.setPaintLabels(true);
+        
+        	// Add positions label in the slider
+        Hashtable position = new Hashtable();
+        position.put(5, new JLabel("5"));
+        position.put(10, new JLabel("10"));
+        position.put(20, new JLabel("20"));
+        position.put(25, new JLabel("25"));
+        		
+        	// Set the label to be drawn
+        slider.setLabelTable(position); 
+        mainPanel.add(slider);
+        frame.add(mainPanel);
+		frame.pack();
+		frame.setVisible(true);
+        
+        
+        // add button "Run Test"
+		
+        ArrayList<JButton> arr = new ArrayList<>();
+        
+        JButton run = new JButton();
+		run.setText("Run Test");
+		
+		mainPanel.add(run);    
+		//adding to frame
+        System.out.print(run.getText() + " ");
+        run.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                 
+            	int val = slider.getValue();
+            	int oddVal = (val * 2) + 1;
+            	
+            	KNNModel Kmodel = new KNNModel(oddVal);
+            	//Kmodel.setK(oddVal);
+            	Kmodel.test(data);
+            	
+        		
+                  
+            }
+         });
+        
+        
+        
         
         JFrame acc = new JFrame("Accuracy and Precision");
         acc.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -278,6 +353,57 @@ public class Graph extends JPanel {
     	    acc.pack();
     		acc.setVisible(true);
     }
+    
+    public static void drive() {
+
+    	 Random rand = new Random(); // creating Random object
+    	 
+    	 ArrayList<DataPoint> data = new ArrayList<>();
+    	 ArrayList<DataPoint> train = new ArrayList<>();
+    	 ArrayList<DataPoint> test = new ArrayList<>();
+    	 
+         try (Scanner scanner = new Scanner(new File("C:\\Users\\lbaus\\OneDrive\\Desktop\\CS112\\usf-cs112-fa-2020-project\\MLLibrary\\titanic.csv"));) {
+       	  while (scanner.hasNextLine()) {
+   	    	  List<String> records = getRecordFromLine(scanner.nextLine());
+   	    	  
+   	    	  try {
+   		    	  String label = records.get(1);
+   		    	  double age = Double.valueOf(records.get(records.size()-2));
+   		    	  double fare = Double.valueOf(records.get(records.size()-1));
+   		    	  
+   		    	  double randNum = rand.nextDouble();
+   		    	  
+   		    	  DataPoint dp;
+   		    	  if (randNum < 0.9) {
+   		    		// Set the type of DataPoint as “train” and put into the Collection
+   		    		  dp = new DataPoint(age,fare,label,"train");
+   		    		  train.add(dp);
+   	    		  } else {
+   	    			// Set the type of DataPoint as “test” and put into the Collection
+   	    			  dp = new DataPoint(age,fare,label,"test");
+   	    			  test.add(dp);
+   		    	  }
+   		    	  data.add(dp);
+   	    	  }
+   	    	  catch(NumberFormatException e) {
+   	    		  System.out.println("empty string error");
+   	    	  }
+       	  }
+   	  } catch (FileNotFoundException e) {
+   		  System.out.println("File not found exception reached");
+   		  return;
+   	}
+         
+         
+        // TODO: Change the above logic retrieve the data from titanic.csv
+        // Split the data to test and training
+        
+        // TODO: Pass in the testData and trainData separately 
+        // Be careful with the order of the variables.
+        createAndShowGui(test, train);
+        
+    }
+    
       
     /* The main method runs createAndShowGui*/
     public static void main(String[] args) {
@@ -297,7 +423,8 @@ public class Graph extends JPanel {
                 double f2 = (random.nextDouble() * maxF2);
                 data.add(new DataPoint(f1, f2, "Random", "Random"));
             }*/
-        	 Random rand = new Random(); // creating Random object
+        	 drive();
+        	 /*Random rand = new Random(); // creating Random object
         	 
         	 ArrayList<DataPoint> data = new ArrayList<>();
         	 ArrayList<DataPoint> train = new ArrayList<>();
@@ -342,7 +469,7 @@ public class Graph extends JPanel {
             // TODO: Pass in the testData and trainData separately 
             // Be careful with the order of the variables.
             createAndShowGui(test, train);
-            
+            */
             
             
             
